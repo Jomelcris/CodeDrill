@@ -1,29 +1,30 @@
-import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { login } from '../api.js'
-import { getCurrentUser, setCurrentUser } from '../auth.js'
+import { useState } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { login } from "../api.js";
+import { getCurrentUser, setCurrentUser } from "../auth.js";
 
 export default function Login() {
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  if (getCurrentUser()) return <Navigate to="/" replace />
+  if (getCurrentUser()) return <Navigate to="/" replace />;
 
   async function handleSubmit(e) {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+    e.preventDefault();
+    setError("");
+    setLoading(true);
     try {
-      const user = await login(email, password)
-      setCurrentUser(user)
-      navigate('/')
+      const user = await login(email, password);
+      setCurrentUser(user);
+      navigate("/");
     } catch (err) {
-      setError(err.message)
+      setError(err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -52,12 +53,18 @@ export default function Login() {
           required
         />
 
+        {location.state?.registered && (
+          <p className="success">Account created. Please log in.</p>
+        )}
         {error && <p className="error">{error}</p>}
 
         <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Log In'}
+          {loading ? "Logging in..." : "Log In"}
         </button>
+        <p className="muted">
+          No account yet? <Link to="/register">Register</Link>
+        </p>
       </form>
     </div>
-  )
+  );
 }

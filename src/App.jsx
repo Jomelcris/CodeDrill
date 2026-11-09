@@ -1,16 +1,18 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
-import Login from './pages/Login.jsx'
-import Landing from './pages/Landing.jsx'
-import { getCurrentUser } from './auth.js'
+import { Navigate, Route, Routes } from "react-router-dom";
+import Login from "./pages/Login.jsx";
+import Landing from "./pages/Landing.jsx";
+import Register from "./pages/Register.jsx";
+import { getCurrentUser } from "./auth.js";
 
 function RequireAuth({ children }) {
-  return getCurrentUser() ? children : <Navigate to="/login" replace />
+  return getCurrentUser() ? children : <Navigate to="/login" replace />;
 }
 
 export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
       <Route
         path="/"
         element={
@@ -21,5 +23,5 @@ export default function App() {
       />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  )
+  );
 }
